@@ -1,0 +1,14 @@
+{
+  "name": "devcon-schedule-to-speech-lambda",
+  "version": "1.0.0",
+  "description": "Devcon schedule speech generator.",
+  "main": "index.js",
+  "scripts": {
+    "package": "zip index.zip index.js",
+    "update.lambda": "npm run package && aws lambda update-function-code --region eu-west-1 --function-name DevconScheduleToSpeech --zip-file fileb://index.zip",
+    "invoke.lambda": "aws lambda invoke --region eu-west-1 --function-name DevconScheduleToSpeech --payload file://testevent.json out.txt",
+    "logs": "awslogs get --aws-region eu-west-1 /aws/lambda/DevconScheduleToSpeech"
+  },
+  "author": "David Schmitz",
+  "license": "ISC"
+}
