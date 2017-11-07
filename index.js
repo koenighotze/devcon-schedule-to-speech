@@ -33,6 +33,9 @@ const storeMp3 = function (title, data) {
                 }
             });
         }
+        else {
+            reject(new Error('Cannot store ' + title));
+        }
     });
 
     return promise;
@@ -45,6 +48,10 @@ const synthesize = function(talk) {
             'OutputFormat': 'mp3',
             'VoiceId': 'Marlene'
         };
+
+        if (talk.lang === 'en') {
+            params.VoiceId = 'Emma';
+        }
 
         console.log('Synthesizing schedule');
         Polly.synthesizeSpeech(params, (err, data) => {
@@ -78,12 +85,9 @@ exports.handler = (event, context, callback) => {
             callback(message);
         } else {
             const devcon = JSON.parse(data.Body.toString()).schedule;
-
-
             const promisses = devcon.map(talk => synthesize(talk));
 
             Promise.all(promisses)
-            // synthesize(devcon[0])
                 .then(res => callback(null, res))
                 .catch(err => callback(err));
         }
